@@ -257,7 +257,7 @@ fun RegisterLayout(
                 .fillMaxWidth()
         ){
             Text(
-                text = "Don’t have an account? ",
+                text = "Already have an account? ",
                 color = Color(0xff979797),
                 fontSize = 12.sp
             )
