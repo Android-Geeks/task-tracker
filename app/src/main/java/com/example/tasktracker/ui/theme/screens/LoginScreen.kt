@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -84,7 +83,8 @@ fun LoginLayout(
 
         Icon(
             painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
-            modifier = Modifier.padding(top = 12.dp, bottom = 40.dp),
+            modifier = Modifier.clickable {  }
+                .padding(top = 12.dp, bottom = 40.dp),
             tint = Color.White,
             contentDescription = "arrow back"
         )
@@ -110,7 +110,7 @@ fun LoginLayout(
             shape = MaterialTheme.shapes.small,
             placeholder = {
                 Text(
-                    modifier = Modifier.fillMaxHeight(),
+                    modifier = Modifier.fillMaxSize(),
                     text = "Enter your username",
                     fontSize = 16.sp
                 )
@@ -145,7 +145,7 @@ fun LoginLayout(
             shape = MaterialTheme.shapes.small,
             placeholder = {
                 Row{
-                    for (i in 0..12) {
+                    repeat(12){
                         Icon(
                             painter = painterResource(id = R.drawable.dot),
                             contentDescription = null,
@@ -201,7 +201,7 @@ fun LoginLayout(
             DrawLine()
             Text(
                 text = "Or",
-                color = Color.White,
+                color = Color(0xff979797),
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier

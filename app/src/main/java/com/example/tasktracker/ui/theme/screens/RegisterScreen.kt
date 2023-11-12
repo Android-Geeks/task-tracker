@@ -81,7 +81,8 @@ fun RegisterLayout(
 
         Icon(
             painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
-            modifier = Modifier.padding(top = 12.dp, bottom = 40.dp),
+            modifier = Modifier.clickable {  }
+                .padding(top = 12.dp, bottom = 40.dp),
             tint = Color.White,
             contentDescription = "arrow back"
         )
@@ -123,7 +124,8 @@ fun RegisterLayout(
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedTextColor = Color.White,
                 disabledPlaceholderColor = Color(0xff535353),
-                focusedTextColor = Color.White
+                focusedTextColor = Color.White,
+
             )
         )
 // ----------------------------------------Password----------------------------------------------
@@ -143,7 +145,7 @@ fun RegisterLayout(
             shape = MaterialTheme.shapes.small,
             placeholder = {
                 Row{
-                    for (i in 0..12) {
+                    repeat(12) {
                         Icon(
                             painter = painterResource(id = R.drawable.dot),
                             contentDescription = null,
@@ -185,7 +187,7 @@ fun RegisterLayout(
             shape = MaterialTheme.shapes.small,
             placeholder = {
                 Row{
-                    for (i in 0..12) {
+                    repeat(12){
                         Icon(
                             painter = painterResource(id = R.drawable.dot),
                             contentDescription = null,
@@ -241,7 +243,7 @@ fun RegisterLayout(
             DrawLine()
             Text(
                 text = "Or",
-                color = Color.White,
+                color = Color(0xff979797),
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
