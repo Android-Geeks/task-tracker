@@ -28,6 +28,7 @@ class TodoViewModel : ViewModel() {
         _todoUiState.update {
             it.copy(
                 password = password,
+                loginSwitch = true
 
             )
         }

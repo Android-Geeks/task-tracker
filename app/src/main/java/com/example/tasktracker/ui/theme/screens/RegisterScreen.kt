@@ -25,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -81,7 +82,8 @@ fun RegisterLayout(
 
         Icon(
             painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
-            modifier = Modifier.clickable {  }
+            modifier = Modifier
+                .clickable { }
                 .padding(top = 12.dp, bottom = 40.dp),
             tint = Color.White,
             contentDescription = "arrow back"
@@ -103,7 +105,7 @@ fun RegisterLayout(
             onValueChange = onUserChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(53.dp),
             singleLine = true,
             shape = MaterialTheme.shapes.small,
             placeholder = {
@@ -135,40 +137,10 @@ fun RegisterLayout(
             fontSize = 16.sp,
             color = Color.White
         )
-        OutlinedTextField(
+        PasswordTemplate(
             value = password,
-            onValueChange =  onPasswordChange ,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            singleLine = true,
-            shape = MaterialTheme.shapes.small,
-            placeholder = {
-                Row{
-                    repeat(12) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.dot),
-                            contentDescription = null,
-                            Modifier.padding(4.dp),
-                        )
-                    }
-                }
-            },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Password
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus()
-                }
-            ),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedTextColor = Color.White,
-                disabledPlaceholderColor = Color(0xff535353),
-                focusedTextColor = Color.White
-            )
+            onValueChange = onPasswordChange,
+            focusManager = focusManager
         )
 //-------------------------------------Confirm password------------------------------------------
         Text(
@@ -177,49 +149,19 @@ fun RegisterLayout(
             fontSize = 16.sp,
             color = Color.White
         )
-        OutlinedTextField(
+        PasswordTemplate(
             value = confirmedPassword,
             onValueChange = onConfirmPassChange,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(48.dp),
-            singleLine = true,
-            shape = MaterialTheme.shapes.small,
-            placeholder = {
-                Row{
-                    repeat(12){
-                        Icon(
-                            painter = painterResource(id = R.drawable.dot),
-                            contentDescription = null,
-                            Modifier.padding(4.dp),
-                        )
-                    }
-                }
-            },
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Password
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus()
-                }
-            ),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedTextColor = Color.White,
-                disabledPlaceholderColor = Color(0xff535353),
-                focusedTextColor = Color.White
-            )
+            focusManager = focusManager
         )
-
+//----------------------------------------Register Button---------------------------------------------
         Button(
             onClick = onLoginClicked,
             shape = MaterialTheme.shapes.small,
             modifier = Modifier
                 .padding(top = 60.dp, bottom = 30.dp)
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(53.dp),
             enabled = registerButtonSwitch,
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xff8687E7),
@@ -273,58 +215,49 @@ fun RegisterLayout(
     }
 }
 
-/*@Composable
-fun PasswordTemplate(
-    text : String,
-    password : String,
-    onValueChanged : ()->Unit,
-    onDoneClicked : () -> Unit
-){
-    val focusManager = LocalFocusManager.current
-    Text(
-        modifier = Modifier.padding(top = 25.dp, bottom = 8.dp),
-        text = text,
-        fontSize = 16.sp,
-        color = Color.White
-    )
-    OutlinedTextField(
-        value = password,
-        onValueChange = { onValueChanged() },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp),
-        singleLine = true,
-        shape = MaterialTheme.shapes.small,
-        placeholder = {
-            Row{
-                for (i in 0..12) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.dot),
-                        contentDescription = null,
-                        Modifier.padding(4.dp),
-                    )
-                }
-            }
-        },
-        visualTransformation = PasswordVisualTransformation(),
 
-        keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = ImeAction.Done,
-            keyboardType = KeyboardType.Password
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                focusManager.clearFocus()
-                onDoneClicked()
+@Composable
+fun PasswordTemplate(
+    value : String,
+    onValueChange : (String) ->Unit,
+    focusManager : FocusManager
+){
+   OutlinedTextField(
+    value = value,
+    onValueChange =  onValueChange ,
+    modifier = Modifier
+        .fillMaxWidth()
+        .height(53.dp),
+    singleLine = true,
+    shape = MaterialTheme.shapes.small,
+    placeholder = {
+        Row{
+            repeat(12) {
+                Icon(
+                    painter = painterResource(id = R.drawable.dot),
+                    contentDescription = null,
+                    Modifier.padding(4.dp),
+                )
             }
-        ),
-        colors = OutlinedTextFieldDefaults.colors(
-            unfocusedTextColor = Color.White,
-            disabledPlaceholderColor = Color(0xff535353),
-            focusedTextColor = Color.White
-        )
+        }
+    },
+    visualTransformation = PasswordVisualTransformation(),
+    keyboardOptions = KeyboardOptions.Default.copy(
+        imeAction = ImeAction.Done,
+        keyboardType = KeyboardType.Password
+    ),
+    keyboardActions = KeyboardActions(
+        onDone = {
+            focusManager.clearFocus()
+        }
+    ),
+    colors = OutlinedTextFieldDefaults.colors(
+        unfocusedTextColor = Color.White,
+        disabledPlaceholderColor = Color(0xff535353),
+        focusedTextColor = Color.White
     )
-}*/
+)
+}
 
 @Preview(showSystemUi = true)
 @Composable

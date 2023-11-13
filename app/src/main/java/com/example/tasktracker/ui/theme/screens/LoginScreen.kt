@@ -83,7 +83,7 @@ fun LoginLayout(
 
         Icon(
             painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
-            modifier = Modifier.clickable {  }
+            modifier = Modifier.clickable { /* add popBack navigation*/}
                 .padding(top = 12.dp, bottom = 40.dp),
             tint = Color.White,
             contentDescription = "arrow back"
@@ -105,7 +105,7 @@ fun LoginLayout(
             onValueChange = onUserChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(53.dp),
             singleLine = true,
             shape = MaterialTheme.shapes.small,
             placeholder = {
@@ -140,7 +140,7 @@ fun LoginLayout(
             onValueChange = onPasswordChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(54.dp),
             singleLine = true,
             shape = MaterialTheme.shapes.small,
             placeholder = {
@@ -230,6 +230,7 @@ fun LoginLayout(
         }
     }
 }
+
 @Composable
 fun DrawLine() {
     // Draw a line using Canvas
