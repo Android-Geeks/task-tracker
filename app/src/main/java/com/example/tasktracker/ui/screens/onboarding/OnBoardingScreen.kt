@@ -1,4 +1,4 @@
-package com.example.tasktracker.screen.onboarding
+package com.example.tasktracker.ui.screens.onboarding
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -57,7 +57,6 @@ fun OnBoardingScreen(
         Text(
             text = stringResource(R.string.skip),
             style = MaterialTheme.typography.bodySmall,
-            color = Color.LightGray,
             modifier = Modifier.clickable {
                 onSkipClick()
             }
@@ -108,14 +107,12 @@ fun PagerScreen(
             Text(
                 text = stringResource(id = onBoardingPage.title),
                 style = MaterialTheme.typography.displayMedium,
-                color = Color.Black,
                 textAlign = TextAlign.Center
             )
             Spacer(modifier = Modifier.height(60.dp))
             Text(
                 text = stringResource(id = onBoardingPage.description),
                 style = MaterialTheme.typography.bodySmall,
-                color = Color.Black,
                 textAlign = TextAlign.Center
             )
         }

@@ -1,4 +1,4 @@
-package com.example.tasktracker.ui.theme.screens
+package com.example.tasktracker.ui.screens
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -18,34 +18,36 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.text.style.TextAlign
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tasktracker.R
 import com.example.tasktracker.TodoViewModel
 
 @Composable
 fun LoginScreen(
-    todoViewModel: TodoViewModel = viewModel()
-){
+    todoViewModel: TodoViewModel = viewModel(),
+    onRegisterClicked: () -> Unit,
+    onBackClick: () -> Unit
+) {
     val todoUiState by todoViewModel.todoUiState.collectAsState()
 
     LoginLayout(
@@ -53,28 +55,30 @@ fun LoginScreen(
         password = todoUiState.password,
         loginSwitch = todoUiState.loginSwitch,
         onUserChange = { todoViewModel.onUsernameChange(it) },
-        onPasswordChange = {todoViewModel.onPasswordChange(it)},
+        onPasswordChange = { todoViewModel.onPasswordChange(it) },
         onLoginClicked = { todoViewModel.onLoginClicked() },
-        onRegisterClicked = {todoViewModel.onRegisterClicked()},
+        onRegisterClicked = onRegisterClicked,
+        onBackClick = onBackClick
     )
 
 }
+
 @Composable
 fun LoginLayout(
-    userName : String,
-    password : String,
-    loginSwitch : Boolean,
-    onLoginClicked : () -> Unit,
-    onPasswordChange : (String) -> Unit,
-    onUserChange : (String) -> Unit,
-    onRegisterClicked : () -> Unit,
+    userName: String,
+    password: String,
+    loginSwitch: Boolean,
+    onLoginClicked: () -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onUserChange: (String) -> Unit,
+    onRegisterClicked: () -> Unit,
+    onBackClick: () -> Unit
 
-){
+) {
     val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
-            .background(Color.Black)
             .padding(horizontal = 24.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Top,
@@ -83,22 +87,20 @@ fun LoginLayout(
 
         Icon(
             painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
-            modifier = Modifier.clickable { /* add popBack navigation*/}
-                .padding(top = 12.dp, bottom = 40.dp),
-            tint = Color.White,
+            modifier = Modifier
+                .padding(top = 12.dp, bottom = 40.dp)
+                .clickable(onClick = onBackClick),
             contentDescription = "arrow back"
         )
         Text(
             text = "Login",
             fontSize = 32.sp,
-            color = Color.White,
             fontWeight = FontWeight.Bold
         )
         Text(
             modifier = Modifier.padding(top = 53.dp, bottom = 8.dp),
             text = "Username",
-            fontSize = 16.sp,
-            color = Color.White
+            fontSize = 16.sp
         )
         OutlinedTextField(
             value = userName,
@@ -122,18 +124,12 @@ fun LoginLayout(
                 onDone = {
                     focusManager.clearFocus()
                 }
-            ),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedTextColor = Color.White,
-                disabledPlaceholderColor = Color(0xff535353),
-                focusedTextColor = Color.White
             )
         )
         Text(
             modifier = Modifier.padding(top = 25.dp, bottom = 8.dp),
             text = "Password",
-            fontSize = 16.sp,
-            color = Color.White
+            fontSize = 16.sp
         )
         OutlinedTextField(
             value = password,
@@ -144,8 +140,8 @@ fun LoginLayout(
             singleLine = true,
             shape = MaterialTheme.shapes.small,
             placeholder = {
-                Row{
-                    repeat(12){
+                Row {
+                    repeat(12) {
                         Icon(
                             painter = painterResource(id = R.drawable.dot),
                             contentDescription = null,
@@ -164,11 +160,6 @@ fun LoginLayout(
                 onDone = {
                     focusManager.clearFocus()
                 }
-            ),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedTextColor = Color.White,
-                disabledPlaceholderColor = Color(0xff535353),
-                focusedTextColor = Color.White
             )
         )
         Button(
@@ -177,14 +168,12 @@ fun LoginLayout(
             modifier = Modifier
                 .padding(top = 60.dp, bottom = 30.dp)
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(48.dp)
+                .alpha(if (loginSwitch) 1f else .5f),
             enabled = loginSwitch,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xff8687E7),
-                contentColor = Color(0xFFFFFFFF),
-                disabledContainerColor = Color(0x808687E7),
-                disabledContentColor = Color(0x80FFFFFF)
-
+                disabledContainerColor = MaterialTheme.colorScheme.primary,
+                disabledContentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             Text(
@@ -197,15 +186,14 @@ fun LoginLayout(
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             DrawLine()
             Text(
                 text = "Or",
-                color = Color(0xff979797),
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .background(color = Color.Black)
+                    .background(color = MaterialTheme.colorScheme.background)
                     .padding(horizontal = 4.dp)
             )
 
@@ -215,16 +203,15 @@ fun LoginLayout(
             modifier = Modifier
                 .padding(top = 10.dp)
                 .fillMaxWidth()
-        ){
+        ) {
             Text(
+                modifier = Modifier.alpha(.87f),
                 text = "Don’t have an account? ",
-                color = Color(0xff979797),
                 fontSize = 12.sp
             )
             Text(
-                modifier = Modifier.clickable { onRegisterClicked() },
+                modifier = Modifier.clickable(onClick = onRegisterClicked),
                 text = "Register",
-                color = Color.White,
                 fontSize = 12.sp
             )
         }
@@ -252,11 +239,12 @@ fun DrawLine() {
         )
     }
 }
+
 @Preview(showSystemUi = true)
 @Composable
-fun LoginScreenPreview(){
-    val  todoViewModel: TodoViewModel = viewModel()
+fun LoginScreenPreview() {
+    val todoViewModel: TodoViewModel = viewModel()
     LoginScreen(
-        todoViewModel
+        todoViewModel, {},{}
     )
 }
