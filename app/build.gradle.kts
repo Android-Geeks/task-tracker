@@ -84,12 +84,8 @@ dependencies {
     //jsoup to eliminate unwanted HTML
     implementation("org.jsoup:jsoup:1.16.2")
 
-    // Splash API
-    implementation("androidx.core:core-splashscreen:1.0.1")
-
-    // Pager and Indicators - Accompanist
-    implementation("com.google.accompanist:accompanist-pager:0.32.0")
-    implementation("com.google.accompanist:accompanist-pager-indicators:0.32.0")
+    // Splash Screen
+    implementation("androidx.core:core-splashscreen:1.1.0-alpha02")
 
     // DataStore Preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
