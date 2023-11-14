@@ -1,10 +1,8 @@
-package com.example.tasktracker.data
+package com.example.tasktracker.ui.screens.register
 
-
-data class TodoUiState(
+data class RegisterUiState(
     var userName : String = "",
     var password : String = "",
     var confirmedPassword : String = "",
-    var loginSwitch : Boolean = false,
     var registerButtonSwitch : Boolean = false
 )

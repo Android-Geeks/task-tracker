@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.tasktracker.ui.screens.LoginScreen
-import com.example.tasktracker.ui.screens.RegisterScreen
+import com.example.tasktracker.ui.screens.login.LoginScreen
+import com.example.tasktracker.ui.screens.register.RegisterScreen
 import com.example.tasktracker.ui.screens.StartScreen
 import com.example.tasktracker.ui.screens.onboarding.OnBoardingScreen
 

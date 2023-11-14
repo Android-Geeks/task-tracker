@@ -1,21 +1,23 @@
-package com.example.tasktracker.ui.screens
+package com.example.tasktracker.ui.screens.login
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -25,10 +27,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -38,43 +41,38 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tasktracker.R
-import com.example.tasktracker.TodoViewModel
 
 @Composable
-fun RegisterScreen(
-    todoViewModel: TodoViewModel = viewModel(),
-    onLoginClicked: () -> Unit,
+fun LoginScreen(
+    loginViewModel: LoginViewModel = viewModel(),
+    onRegisterClicked: () -> Unit,
     onBackClick: () -> Unit
 ) {
+    val loginUiState by loginViewModel.loginUiState.collectAsState()
 
-    val todoUiState by todoViewModel.todoUiState.collectAsState()
-
-    RegisterLayout(
-        userName = todoUiState.userName,
-        password = todoUiState.password,
-        confirmedPassword = todoUiState.confirmedPassword,
-        registerButtonSwitch = todoUiState.registerButtonSwitch,
-        onRegisterClicked = { todoViewModel.onLoginClicked() },
-        onPasswordChange = { todoViewModel.onPasswordChange(it) },
-        onUserChange = { todoViewModel.onUsernameChange(it) },
-        onConfirmPassChange = { todoViewModel.onConfirmPassChange(it) },
-        onBackClick = onBackClick,
-        onLoginClicked = onLoginClicked
+    LoginLayout(
+        userName = loginUiState.userName,
+        password = loginUiState.password,
+        loginSwitch = loginUiState.loginSwitch,
+        onUserChange = { loginViewModel.onUsernameChange(it) },
+        onPasswordChange = { loginViewModel.onPasswordChange(it) },
+        onLoginClicked = { loginViewModel.onLoginClicked() },
+        onRegisterClicked = onRegisterClicked,
+        onBackClick = onBackClick
     )
 }
 
 @Composable
-fun RegisterLayout(
+fun LoginLayout(
     userName: String,
     password: String,
-    confirmedPassword: String,
-    registerButtonSwitch: Boolean,
-    onRegisterClicked: () -> Unit,
+    loginSwitch: Boolean,
+    onLoginClicked: () -> Unit,
     onPasswordChange: (String) -> Unit,
     onUserChange: (String) -> Unit,
-    onConfirmPassChange: (String) -> Unit,
-    onBackClick: () -> Unit,
-    onLoginClicked: () -> Unit
+    onRegisterClicked: () -> Unit,
+    onBackClick: () -> Unit
+
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -85,37 +83,40 @@ fun RegisterLayout(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-
-        Icon(
-            painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
+        IconButton(
+            onClick =  onBackClick,
             modifier = Modifier
                 .padding(top = 12.dp, bottom = 40.dp)
-                .clickable(onClick = onBackClick),
-            contentDescription = "arrow back"
-        )
+                .size(24.dp)
+        ){
+            Icon(
+                painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
+                modifier = Modifier.fillMaxSize(),
+                contentDescription = "arrow back"
+            )
+        }
         Text(
-            text = "Register",
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold
+            text = "Login",
+            style = MaterialTheme.typography.displayMedium
         )
         Text(
             modifier = Modifier.padding(top = 53.dp, bottom = 8.dp),
             text = "Username",
-            fontSize = 16.sp
+            style = MaterialTheme.typography.bodySmall
         )
         OutlinedTextField(
             value = userName,
             onValueChange = onUserChange,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(53.dp),
+                .height(56.dp),
             singleLine = true,
             shape = MaterialTheme.shapes.small,
             placeholder = {
                 Text(
-                    modifier = Modifier.fillMaxHeight(),
+                    modifier = Modifier.fillMaxSize(),
                     text = "Enter your username",
-                    fontSize = 16.sp
+                    style = MaterialTheme.typography.bodySmall
                 )
             },
             keyboardOptions = KeyboardOptions.Default.copy(
@@ -127,47 +128,59 @@ fun RegisterLayout(
                 }
             )
         )
-// ----------------------------------------Password----------------------------------------------
         Text(
             modifier = Modifier.padding(top = 25.dp, bottom = 8.dp),
             text = "Password",
-            fontSize = 16.sp
+            style = MaterialTheme.typography.bodySmall
         )
-        PasswordTemplate(
+        OutlinedTextField(
             value = password,
             onValueChange = onPasswordChange,
-            focusManager = focusManager
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            singleLine = true,
+            shape = MaterialTheme.shapes.small,
+            placeholder = {
+                Row {
+                    repeat(12) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.dot),
+                            contentDescription = null,
+                            Modifier.padding(4.dp),
+                        )
+                    }
+                }
+            },
+            visualTransformation = PasswordVisualTransformation(),
+
+            keyboardOptions = KeyboardOptions.Default.copy(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Password
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                }
+            )
         )
-//-------------------------------------Confirm password------------------------------------------
-        Text(
-            modifier = Modifier.padding(top = 25.dp, bottom = 8.dp),
-            text = "Confirm password",
-            fontSize = 16.sp
-        )
-        PasswordTemplate(
-            value = confirmedPassword,
-            onValueChange = onConfirmPassChange,
-            focusManager = focusManager
-        )
-//----------------------------------------Register Button---------------------------------------------
         Button(
-            onClick = onRegisterClicked,
+            onClick = onLoginClicked,
             shape = MaterialTheme.shapes.small,
             modifier = Modifier
                 .padding(top = 60.dp, bottom = 30.dp)
                 .fillMaxWidth()
                 .height(53.dp)
-                .alpha(if (registerButtonSwitch) 1f else .5f),
-            enabled = registerButtonSwitch,
+                .alpha(if (loginSwitch) 1f else .5f),
+            enabled = loginSwitch,
             colors = ButtonDefaults.buttonColors(
                 disabledContainerColor = MaterialTheme.colorScheme.primary,
                 disabledContentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             Text(
-                text = "Register",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal
+                text = "Login",
+                style = MaterialTheme.typography.bodySmall
             )
         }
 
@@ -194,62 +207,45 @@ fun RegisterLayout(
         ) {
             Text(
                 modifier = Modifier.alpha(.87f),
-                text = "Already have an account? ",
+                text = "Don’t have an account? ",
                 fontSize = 12.sp
             )
             Text(
-                modifier = Modifier.clickable(onClick = onLoginClicked),
-                text = "Login",
+                modifier = Modifier.clickable(onClick = onRegisterClicked),
+                text = "Register",
                 fontSize = 12.sp
             )
         }
     }
 }
 
-
 @Composable
-fun PasswordTemplate(
-    value: String,
-    onValueChange: (String) -> Unit,
-    focusManager: FocusManager
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(53.dp),
-        singleLine = true,
-        shape = MaterialTheme.shapes.small,
-        placeholder = {
-            Row {
-                repeat(12) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.dot),
-                        contentDescription = null,
-                        Modifier.padding(4.dp),
-                    )
-                }
-            }
-        },
-        visualTransformation = PasswordVisualTransformation(),
-        keyboardOptions = KeyboardOptions.Default.copy(
-            imeAction = ImeAction.Done,
-            keyboardType = KeyboardType.Password
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = {
-                focusManager.clearFocus()
-            }
+fun DrawLine() {
+    // Draw a line using Canvas
+    Canvas(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        val startX = 0f
+        val startY = 0f
+        val endX = size.width
+        val endY = 0f
+
+        // Draw a line from (startX, startY) to (endX, endY)
+        drawLine(
+            color = Color(0xff979797),
+            start = Offset(startX, startY),
+            end = Offset((endX), endY),
+            strokeWidth = 1.dp.toPx(),
+            cap = StrokeCap.Round
         )
-    )
+    }
 }
 
 @Preview(showSystemUi = true)
 @Composable
-fun RegisterScreenPreview() {
-    val todoViewModel: TodoViewModel = viewModel()
-    RegisterScreen(
-        todoViewModel, {}, {}
+fun LoginScreenPreview() {
+    val loginViewModel: LoginViewModel = viewModel()
+    LoginScreen(
+        loginViewModel, {}, {}
     )
 }
