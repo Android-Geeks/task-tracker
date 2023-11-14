@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -79,19 +82,20 @@ fun LoginLayout(
 
     Column(
         modifier = Modifier
-            .padding(horizontal = 24.dp)
+            .padding(16.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.Start
     ) {
-
-        Icon(
-            painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
-            modifier = Modifier
-                .padding(top = 12.dp, bottom = 40.dp)
-                .clickable(onClick = onBackClick),
-            contentDescription = "arrow back"
-        )
+        IconButton(
+            onClick = onBackClick,
+            modifier = Modifier.padding(bottom = 40.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.ArrowBack,
+                contentDescription = "arrow back",
+            )
+        }
         Text(
             text = "Login",
             fontSize = 32.sp,
@@ -245,6 +249,6 @@ fun DrawLine() {
 fun LoginScreenPreview() {
     val todoViewModel: TodoViewModel = viewModel()
     LoginScreen(
-        todoViewModel, {},{}
+        todoViewModel, {}, {}
     )
 }
