@@ -1,4 +1,4 @@
-package com.example.tasktracker.ui.theme.screens
+package com.example.tasktracker.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,15 +18,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,7 +41,11 @@ import com.example.tasktracker.R
 import com.example.tasktracker.TodoViewModel
 
 @Composable
-fun RegisterScreen (todoViewModel : TodoViewModel = viewModel()){
+fun RegisterScreen(
+    todoViewModel: TodoViewModel = viewModel(),
+    onLoginClicked: () -> Unit,
+    onBackClick: () -> Unit
+) {
 
     val todoUiState by todoViewModel.todoUiState.collectAsState()
 
@@ -51,29 +54,32 @@ fun RegisterScreen (todoViewModel : TodoViewModel = viewModel()){
         password = todoUiState.password,
         confirmedPassword = todoUiState.confirmedPassword,
         registerButtonSwitch = todoUiState.registerButtonSwitch,
-        onLoginClicked = { todoViewModel.onLoginClicked() },
-        onPasswordChange = {todoViewModel.onPasswordChange(it)},
-        onUserChange = {todoViewModel.onUsernameChange(it)},
-        onConfirmPassChange = {todoViewModel.onConfirmPassChange(it)}
+        onRegisterClicked = { todoViewModel.onLoginClicked() },
+        onPasswordChange = { todoViewModel.onPasswordChange(it) },
+        onUserChange = { todoViewModel.onUsernameChange(it) },
+        onConfirmPassChange = { todoViewModel.onConfirmPassChange(it) },
+        onBackClick = onBackClick,
+        onLoginClicked = onLoginClicked
     )
 }
 
 @Composable
 fun RegisterLayout(
-    userName : String,
-    password : String,
-    confirmedPassword : String,
-    registerButtonSwitch : Boolean,
-    onLoginClicked : () -> Unit,
-    onPasswordChange : (String) -> Unit,
-    onUserChange : (String) -> Unit,
-    onConfirmPassChange : (String) -> Unit
-){
+    userName: String,
+    password: String,
+    confirmedPassword: String,
+    registerButtonSwitch: Boolean,
+    onRegisterClicked: () -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onUserChange: (String) -> Unit,
+    onConfirmPassChange: (String) -> Unit,
+    onBackClick: () -> Unit,
+    onLoginClicked: () -> Unit
+) {
     val focusManager = LocalFocusManager.current
 
     Column(
         modifier = Modifier
-            .background(Color.Black)
             .padding(horizontal = 24.dp)
             .fillMaxSize(),
         verticalArrangement = Arrangement.Top,
@@ -83,22 +89,19 @@ fun RegisterLayout(
         Icon(
             painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
             modifier = Modifier
-                .clickable { }
-                .padding(top = 12.dp, bottom = 40.dp),
-            tint = Color.White,
+                .padding(top = 12.dp, bottom = 40.dp)
+                .clickable(onClick = onBackClick),
             contentDescription = "arrow back"
         )
         Text(
             text = "Register",
             fontSize = 32.sp,
-            color = Color.White,
             fontWeight = FontWeight.Bold
         )
         Text(
             modifier = Modifier.padding(top = 53.dp, bottom = 8.dp),
             text = "Username",
-            fontSize = 16.sp,
-            color = Color.White
+            fontSize = 16.sp
         )
         OutlinedTextField(
             value = userName,
@@ -122,20 +125,13 @@ fun RegisterLayout(
                 onDone = {
                     focusManager.clearFocus()
                 }
-            ),
-            colors = OutlinedTextFieldDefaults.colors(
-                unfocusedTextColor = Color.White,
-                disabledPlaceholderColor = Color(0xff535353),
-                focusedTextColor = Color.White,
-
             )
         )
 // ----------------------------------------Password----------------------------------------------
         Text(
             modifier = Modifier.padding(top = 25.dp, bottom = 8.dp),
             text = "Password",
-            fontSize = 16.sp,
-            color = Color.White
+            fontSize = 16.sp
         )
         PasswordTemplate(
             value = password,
@@ -146,8 +142,7 @@ fun RegisterLayout(
         Text(
             modifier = Modifier.padding(top = 25.dp, bottom = 8.dp),
             text = "Confirm password",
-            fontSize = 16.sp,
-            color = Color.White
+            fontSize = 16.sp
         )
         PasswordTemplate(
             value = confirmedPassword,
@@ -156,19 +151,17 @@ fun RegisterLayout(
         )
 //----------------------------------------Register Button---------------------------------------------
         Button(
-            onClick = onLoginClicked,
+            onClick = onRegisterClicked,
             shape = MaterialTheme.shapes.small,
             modifier = Modifier
                 .padding(top = 60.dp, bottom = 30.dp)
                 .fillMaxWidth()
-                .height(53.dp),
+                .height(53.dp)
+                .alpha(if (registerButtonSwitch) 1f else .5f),
             enabled = registerButtonSwitch,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xff8687E7),
-                contentColor = Color(0xFFFFFFFF),
-                disabledContainerColor = Color(0x808687E7),
-                disabledContentColor = Color(0x80FFFFFF)
-
+                disabledContainerColor = MaterialTheme.colorScheme.primary,
+                disabledContentColor = MaterialTheme.colorScheme.onPrimary
             )
         ) {
             Text(
@@ -181,15 +174,14 @@ fun RegisterLayout(
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             DrawLine()
             Text(
                 text = "Or",
-                color = Color(0xff979797),
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .background(color = Color.Black)
+                    .background(color = MaterialTheme.colorScheme.background)
                     .padding(horizontal = 4.dp)
             )
 
@@ -199,16 +191,15 @@ fun RegisterLayout(
             modifier = Modifier
                 .padding(top = 10.dp)
                 .fillMaxWidth()
-        ){
+        ) {
             Text(
+                modifier = Modifier.alpha(.87f),
                 text = "Already have an account? ",
-                color = Color(0xff979797),
                 fontSize = 12.sp
             )
             Text(
-                modifier = Modifier.clickable { /* Handle navigation */},
+                modifier = Modifier.clickable(onClick = onLoginClicked),
                 text = "Login",
-                color = Color.White,
                 fontSize = 12.sp
             )
         }
@@ -218,52 +209,47 @@ fun RegisterLayout(
 
 @Composable
 fun PasswordTemplate(
-    value : String,
-    onValueChange : (String) ->Unit,
-    focusManager : FocusManager
-){
-   OutlinedTextField(
-    value = value,
-    onValueChange =  onValueChange ,
-    modifier = Modifier
-        .fillMaxWidth()
-        .height(53.dp),
-    singleLine = true,
-    shape = MaterialTheme.shapes.small,
-    placeholder = {
-        Row{
-            repeat(12) {
-                Icon(
-                    painter = painterResource(id = R.drawable.dot),
-                    contentDescription = null,
-                    Modifier.padding(4.dp),
-                )
+    value: String,
+    onValueChange: (String) -> Unit,
+    focusManager: FocusManager
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(53.dp),
+        singleLine = true,
+        shape = MaterialTheme.shapes.small,
+        placeholder = {
+            Row {
+                repeat(12) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.dot),
+                        contentDescription = null,
+                        Modifier.padding(4.dp),
+                    )
+                }
             }
-        }
-    },
-    visualTransformation = PasswordVisualTransformation(),
-    keyboardOptions = KeyboardOptions.Default.copy(
-        imeAction = ImeAction.Done,
-        keyboardType = KeyboardType.Password
-    ),
-    keyboardActions = KeyboardActions(
-        onDone = {
-            focusManager.clearFocus()
-        }
-    ),
-    colors = OutlinedTextFieldDefaults.colors(
-        unfocusedTextColor = Color.White,
-        disabledPlaceholderColor = Color(0xff535353),
-        focusedTextColor = Color.White
+        },
+        visualTransformation = PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Done,
+            keyboardType = KeyboardType.Password
+        ),
+        keyboardActions = KeyboardActions(
+            onDone = {
+                focusManager.clearFocus()
+            }
+        )
     )
-)
 }
 
 @Preview(showSystemUi = true)
 @Composable
-fun RegisterScreenPreview(){
-    val  todoViewModel: TodoViewModel = viewModel()
+fun RegisterScreenPreview() {
+    val todoViewModel: TodoViewModel = viewModel()
     RegisterScreen(
-        todoViewModel
+        todoViewModel, {}, {}
     )
 }

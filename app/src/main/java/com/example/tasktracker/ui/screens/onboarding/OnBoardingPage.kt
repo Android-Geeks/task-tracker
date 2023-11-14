@@ -1,4 +1,4 @@
-package com.example.tasktracker.screen.onboarding
+package com.example.tasktracker.ui.screens.onboarding
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
