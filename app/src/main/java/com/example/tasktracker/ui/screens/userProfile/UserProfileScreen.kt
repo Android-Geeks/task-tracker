@@ -1,6 +1,7 @@
 package com.example.tasktracker.ui.screens.userProfile
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,11 +42,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tasktracker.ui.screens.register.PasswordTemplate
 
 @Composable
 fun UserProfileScreen(
-    userViewModel : UserProfileViewModel = viewModel(),
-    userName : String = "Martha Hays"
+    userViewModel : UserProfileViewModel = viewModel()
 ) {
     val userUiState by userViewModel.userProfUiState.collectAsState()
 
@@ -71,10 +72,10 @@ fun UserProfileScreen(
                     .size(85.dp),
                 shape = RoundedCornerShape(50.dp)
             ) {
-
+//                TODO
             }
             Text(
-                text = userName,
+                text = userUiState.userName,
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color(0xDEFFFFFF)
             )
@@ -85,7 +86,7 @@ fun UserProfileScreen(
                     .height(58.dp)
             ) {
                 TaskNumberCard(
-                    cardContent = "10 Task left",
+                    cardContent = "10 Task left",     // will replace with specific number
                     Modifier
                         .fillMaxHeight()
                         .weight(1f)
@@ -94,7 +95,7 @@ fun UserProfileScreen(
                 Spacer(modifier = Modifier.width(20.dp))
 
                 TaskNumberCard(
-                    cardContent = "5 Task done",
+                    cardContent = "5 Task done",    // will replace with specific number
                     Modifier
                         .fillMaxHeight()
                         .weight(1f)
@@ -117,30 +118,30 @@ fun UserProfileScreen(
             AccountSettingItem(
                 painterResource(id = R.drawable.user_icon),
                 itemContent = "Change account name",
-                onItemClicked = {userViewModel.showUserDialog()}
+                onItemClicked = {userViewModel.showUserNameDialog()}
             )
             AccountSettingItem(
                 painterResource(id = R.drawable.key),
                 itemContent = "Change account password ",
-                onItemClicked = {}
+                onItemClicked = {userViewModel.showUserPasswordDialog()}
             )
             AccountSettingItem(
                 painterResource(id = R.drawable.camera),
                 itemContent = "Change account Image ",
-                onItemClicked = {}
+                onItemClicked = {userViewModel.showImageDiagonal()}
             )
             Text(
                 modifier = Modifier
                     .padding(top = 10.dp)
                     .fillMaxWidth(),
-                text = "Uptodo",
+                text = stringResource(R.string.uptodo),
                 fontSize = 14.sp,
                 color = Color(0xFFAFAFAF),
                 textAlign = TextAlign.Start
             )
             Row(
                 modifier = Modifier
-                    .padding(top = 76.dp)
+                    .padding(top = 30.dp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
@@ -157,7 +158,9 @@ fun UserProfileScreen(
                     )
                 }
                 Text(
-                    modifier = Modifier.padding(start = 10.dp),
+                    modifier = Modifier
+                        .clickable { /*TODO*/ }
+                        .padding(start = 10.dp),
                     text = "Log out",
                     style = MaterialTheme.typography.bodySmall,
                     color = Color(0xFFFF4949),
@@ -166,51 +169,230 @@ fun UserProfileScreen(
             }
         }
     }
-    UsernameDialog(userName, userUiState.showUserDialog) { userViewModel.cancelUserDialog() }
+    UsernameDialog(
+        userName = userUiState.userName,
+        showUsernameDialog =userUiState.showUserNameDialog,
+        cancelUserDialog = { userViewModel.cancelUserNameDialog() },
+        onUsernameChange = {userViewModel.onUserNameChange(it)}
+    )
+    UserPasswordDialog(
+        oldPassword = userUiState.oldPassword,
+        newPassword = userUiState.newPassword,
+        onOldPasswordChange = {userViewModel.onOldPasswordChange(it)} ,
+        onNewPasswordChange = {userViewModel.onNewPasswordChange(it)},
+        showUserPasswordDialog = userUiState.showUserPasswordDialog,
+        cancelUserDialog = {userViewModel.cancelUserPasswordDialog()}
+    )
+    UserImageDialog(
+        showUserImageDialog = userUiState.showUserImageDialog,
+        cancelUserDialog = {userViewModel.cancelImageDiagonal()}
+    )
 }
-
-@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun UsernameDialog(
-    userName : String,
-    showUsernameDialog : Boolean,
+fun UserImageDialog(
+    showUserImageDialog : Boolean,
+    cancelUserDialog : ()->Unit
+){
+    if (showUserImageDialog){
+        AlertDialog(
+            modifier = Modifier.size(324.dp, 192.dp),
+            onDismissRequest =  cancelUserDialog ,
+            shape = RoundedCornerShape(4.dp),
+            title = {
+
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Change account Image",
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center
+                    )
+            },
+            containerColor = Color(0xFF363636),
+            text = {
+                Column(
+                    verticalArrangement = Arrangement.Top
+                ){
+                    Divider(
+                    color = Color.Gray,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(vertical = 10.dp)
+                )
+                    Text(
+                        text = "Import from Google Drive",
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Start,
+                        modifier = Modifier
+                            .clickable { /*TODO*/ }
+                            .padding(top = 40.dp)
+                    )
+                }
+            },
+            confirmButton = {},
+            dismissButton = {}
+        )
+    }
+}
+@Composable
+fun UserPasswordDialog(
+    oldPassword : String,
+    newPassword : String,
+    onOldPasswordChange : (String)-> Unit ,
+    onNewPasswordChange : (String)->Unit,
+    showUserPasswordDialog : Boolean,
     cancelUserDialog : ()-> Unit
-) {
+){
     val focusManager = LocalFocusManager.current
 
-    if (showUsernameDialog){
+    if (showUserPasswordDialog){
         AlertDialog(
-            onDismissRequest = { focusManager.clearFocus()},
+            onDismissRequest =  cancelUserDialog ,
+            shape = RoundedCornerShape(4.dp),
             title = {
                 Text(
-                    text = "Dialog Title",
-                    color = Color.White
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Change account password",
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center
                 )
             },
             containerColor = Color(0xFF363636),
             text = {
-                OutlinedTextField(
-                    value = userName,
-                    onValueChange = {},
-                    shape = MaterialTheme.shapes.medium,
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done,
-                    ),
-                    keyboardActions = KeyboardActions(
-                        onDone = {
-                            focusManager.clearFocus()
-                        }
+                Column{
+                    Divider(
+                        color = Color.Gray,
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(vertical = 10.dp)
                     )
-                )
-
+                    Text(
+                        text ="Enter old password",
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                        fontSize = 14.sp,
+                        color = Color.White
+                    )
+                    PasswordTemplate(
+                        value = oldPassword,
+                        onValueChange = onOldPasswordChange,
+                        focusManager = focusManager,
+                    )
+                    Text(
+                        text ="Enter new password",
+                        modifier = Modifier
+                            .padding(top = 10.dp, bottom = 8.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                        fontSize = 14.sp,
+                        color = Color.White
+                    )
+                    PasswordTemplate(
+                        value = newPassword,
+                        onValueChange = onNewPasswordChange,
+                        focusManager = focusManager,
+                    )
+                }
             },
             confirmButton = {
                 Row {
                     Button(
                         onClick = {
-                            // Perform any actions needed, then dismiss the dialog
+//                            check entered password
+                        },
+                        shape = MaterialTheme.shapes.medium,
+                        modifier = Modifier
+                            .height(48.dp)
+                            .width(130.dp),
+                        colors = ButtonDefaults.buttonColors(Color(0xFF8687E7))
+                    ) {
+                        Text(
+                            text = "Edit",
+                            color = Color.White,
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
+            },
+            dismissButton = {
+                Row {
+                    Button(
+                        onClick = {
+                            cancelUserDialog()
+                        },
+                        shape = MaterialTheme.shapes.medium,
+                        modifier = Modifier
+                            .height(48.dp)
+                            .width(130.dp),
+                        colors = ButtonDefaults.buttonColors(Color.Unspecified)
+                    ) {
+                        Text(
+                            text = "Cancel",
+                            color = Color(0xFF8875FF),
+                            style = MaterialTheme.typography.bodySmall
+                        )
+                    }
+                }
+            },
+        )
+    }
+}
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun UsernameDialog(
+    userName : String,
+    showUsernameDialog : Boolean,
+    cancelUserDialog : ()-> Unit,
+    onUsernameChange : (String)-> Unit
+) {
+    val focusManager = LocalFocusManager.current
 
+    if (showUsernameDialog){
+        AlertDialog(
+            modifier = Modifier.fillMaxWidth(),
+            onDismissRequest =  cancelUserDialog ,
+            shape = RoundedCornerShape(4.dp),
+            title = {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = "Change account name",
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center
+
+                )
+            },
+            containerColor = Color(0xFF363636),
+            text = {
+                Column( verticalArrangement = Arrangement.Top){
+                    Divider(
+                        color = Color.Gray,
+                        thickness = 1.dp,
+                        modifier = Modifier.padding(vertical = 10.dp)
+                    )
+                    OutlinedTextField(
+                        value = userName,
+                        onValueChange = onUsernameChange,
+                        shape = MaterialTheme.shapes.medium,
+                        singleLine = true,
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done,
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                focusManager.clearFocus()
+                            }
+                        )
+                    )
+                }
+            },
+            confirmButton = {
+                Row {
+                    Button(
+                        onClick = {
+                            onUsernameChange(userName)
                         },
                         shape = MaterialTheme.shapes.medium,
                         modifier = Modifier
@@ -250,11 +432,6 @@ fun UsernameDialog(
     }
 }
 
-@Preview
-@Composable
-fun P(){
-    UsernameDialog(userName = "", showUsernameDialog = true) {}
-}
 @Composable
 fun AccountSettingItem(
     icon : Painter,
@@ -318,9 +495,11 @@ fun TaskNumberCard(
         }
     }
 }
+
 @Preview
 @Composable
 fun UserProfilePreview(){
     TaskTrackerTheme(darkTheme = true)
     { UserProfileScreen() }
 }
+
