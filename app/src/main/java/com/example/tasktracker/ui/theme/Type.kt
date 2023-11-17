@@ -50,6 +50,6 @@ val Typography = Typography(
             Font(R.font.lato_regular, FontWeight.Normal),
         ),
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 12.sp
     ),
 )
