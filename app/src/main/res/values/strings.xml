@@ -11,4 +11,6 @@
     <string name="please_login">Please login to your account or create new account to continue</string>
     <string name="login">LOGIN</string>
     <string name="create_account">CREATE ACCOUNT</string>
+    <string name="profile">Profile</string>
+    <string name="username">Martha Hays</string>
 </resources>

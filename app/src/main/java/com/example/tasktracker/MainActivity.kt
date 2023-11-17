@@ -11,7 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.tasktracker.ui.navigate.TaskTrackerApp
+import com.example.tasktracker.ui.screens.userProfile.UserProfileScreen
 import com.example.tasktracker.ui.theme.TaskTrackerTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,7 +30,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    TaskTrackerApp()
+//                    TaskTrackerApp()
+                UserProfileScreen()
                 }
 
             }
