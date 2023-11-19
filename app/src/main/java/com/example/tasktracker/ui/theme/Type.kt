@@ -1,13 +1,15 @@
 package com.example.tasktracker.ui.theme
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tasktracker.R
-
 
 val Typography = Typography(
     displayLarge = TextStyle(
@@ -43,13 +45,13 @@ val Typography = Typography(
             Font(R.font.lato_regular, FontWeight.Normal),
         ),
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp
+        fontSize = 16.sp
     ),
     bodySmall = TextStyle(
         fontFamily = FontFamily(
             Font(R.font.lato_regular, FontWeight.Normal),
         ),
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 12.sp
     ),
 )
