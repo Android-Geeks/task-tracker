@@ -1,7 +1,26 @@
 package com.example.tasktracker.ui.screens.home
 
 data class HomeUiState(
-    val tasks: List<Task> = emptyList(),
+    val tasks: List<Task> = listOf(
+        Task(
+            id = "1",
+            category = "math",
+            description = "do my homework",
+            dueDate = "Today At 07:00 AM",
+            isCompleted = false,
+            priority = "1",
+            title = "do my homework"
+        ),
+        Task(
+            id = "2",
+            category = "Math",
+            description = "do my homework",
+            dueDate = "Today At 02:00 AM",
+            isCompleted = true,
+            priority = "1",
+            title = "do my homework"
+        )
+    ),
     val user: User = User()
 )
 

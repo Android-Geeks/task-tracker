@@ -7,24 +7,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import com.example.tasktracker.R
 import com.example.tasktracker.ui.theme.TaskTrackerTheme
 
@@ -35,7 +28,7 @@ fun HomeScreen(
     val uiState = viewModel.uiState.value
     Scaffold(
         topBar = {
-            TopAppBar(
+            HomeTopAppBar(
                 imageUrl = uiState.user.imageUrl,
                 onClickProfile = viewModel::onProfileClicked,
                 onClickSort = viewModel::onClickSort
@@ -57,10 +50,12 @@ fun HomeScreen(
     }
 }
 
+
 @Composable
 fun TasksList(tasks: List<Task>, onTaskClicked: (String) -> Unit) {
 
 }
+
 
 @Composable
 fun EmptyTasks() {
@@ -84,45 +79,6 @@ fun EmptyTasks() {
             style = MaterialTheme.typography.bodyMedium
         )
     }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBar(
-    imageUrl: String,
-    onClickProfile: () -> Unit,
-    onClickSort: () -> Unit
-) {
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = "Home",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        },
-        actions = {
-            IconButton(onClick = onClickProfile) {
-                AsyncImage(
-                    model = imageUrl,
-                    contentDescription = "Profile",
-                    placeholder = painterResource(id = R.drawable.user_profile),
-                    error = painterResource(id = R.drawable.user_profile),
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(CircleShape)
-                )
-            }
-        },
-        navigationIcon = {
-            IconButton(onClick = onClickSort) {
-                Icon(
-                    painter = painterResource(id = R.drawable.sort),
-                    contentDescription = "Sort",
-                )
-            }
-        }
-    )
 }
 
 @Preview
