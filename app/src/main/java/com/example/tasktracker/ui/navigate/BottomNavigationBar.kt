@@ -83,7 +83,7 @@ fun AddTaskButton(
                 if (isDarkMode(context = LocalContext.current))
                     Color(0xFF3648AC)
                 else
-                    Color(0xFF03A9F4)
+                    Color(0xFF8687E7)
             ),
     ) {
         Icon(

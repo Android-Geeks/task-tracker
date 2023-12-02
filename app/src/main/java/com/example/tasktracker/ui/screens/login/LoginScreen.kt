@@ -39,12 +39,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tasktracker.R
 
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel = viewModel(),
+    loginViewModel: LoginViewModel = hiltViewModel<LoginViewModel>(),
     onRegisterClicked: () -> Unit,
     onBackClick: () -> Unit
 ) {
@@ -84,11 +85,11 @@ fun LoginLayout(
         horizontalAlignment = Alignment.Start
     ) {
         IconButton(
-            onClick =  onBackClick,
+            onClick = onBackClick,
             modifier = Modifier
                 .padding(top = 12.dp, bottom = 40.dp)
                 .size(24.dp)
-        ){
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.baseline_arrow_back_ios_24),
                 modifier = Modifier.fillMaxSize(),

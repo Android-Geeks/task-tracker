@@ -9,11 +9,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.tasktracker.ui.SharedPrefs
 import com.example.tasktracker.ui.screens.StartScreen
 import com.example.tasktracker.ui.screens.home.HomeScreen
 import com.example.tasktracker.ui.screens.login.LoginScreen
@@ -53,16 +55,25 @@ fun TaskTrackerApp() {
                                 // Restore state when reSelecting a previously selected item
                                 restoreState = true
                             }
-
                         }
                     )
                     AddTaskButton(onClickAddTask = { /*TODO*/ })
                 }
-
         }
     ) { innerPadding ->
+        SharedPrefs.setSharedPreferences(LocalContext.current)
+        val onBoardingStatus = SharedPrefs.getOnboardingStatus()
+        val loginStatus = SharedPrefs.getLoginStatus()
         NavHost(
-            navController = navController, startDestination = BottomNavScreen.Home.route,
+            navController = navController,
+            startDestination = if (onBoardingStatus && loginStatus)
+                BottomNavScreen.Home.route
+            else if (onBoardingStatus && !loginStatus) {
+                Screen.Start.route
+            } else {
+                SharedPrefs.setOnboardingStatus(true)
+                Screen.OnBoard.route
+            },
             modifier = Modifier
                 .padding(innerPadding)
                 .statusBarsPadding()
