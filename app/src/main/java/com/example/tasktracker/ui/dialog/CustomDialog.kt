@@ -13,11 +13,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -41,12 +44,17 @@ fun CustomDialog(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(8.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .padding(8.dp),
                 Arrangement.spacedBy(8.dp),
                 Alignment.CenterHorizontally
             ) {
-                Text(text = title, modifier = Modifier.padding(top = 8.dp))
+                Text(
+                    text = title,
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold
+                )
                 Divider(thickness = 1.dp)
                 Box(content = content)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -68,4 +76,11 @@ fun CustomDialog(
             }
         }
     }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Preview(showBackground = true)
+@Composable
+fun Pre_4() {
+    CustomDialog("Choose Category","Save",{},{},{})
 }

@@ -1,4 +1,4 @@
-package com.example.tasktracker.ui.dialog
+package com.example.tasktracker.ui.dialog.category
 
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes

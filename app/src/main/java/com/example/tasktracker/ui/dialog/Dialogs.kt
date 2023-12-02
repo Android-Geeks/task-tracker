@@ -5,5 +5,6 @@ enum class Dialogs {
     DATE,
     TIME,
     FLAG,
-    CATEGORY
+    CATEGORY,
+    DELETE
 }

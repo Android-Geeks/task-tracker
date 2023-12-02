@@ -1,4 +1,4 @@
-package com.example.tasktracker.ui.dialog
+package com.example.tasktracker.ui.dialog.datetime
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -16,6 +16,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.tasktracker.ui.dialog.CustomDialog
+import com.example.tasktracker.ui.dialog.DialogViewModel
+import com.example.tasktracker.ui.dialog.Dialogs
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -27,8 +30,9 @@ import java.time.ZoneOffset
 @Composable
 fun TimeDialog(
     title: String = "Select Time",
+    confirmButtonText: String = "Save",
     onConfirmButtonClick: () -> Unit = { DialogViewModel.changeCurrentDialog(Dialogs.NONE) },
-    onCancelButtonClick: () -> Unit = { DialogViewModel.changeCurrentDialog(Dialogs.DATE) }
+    onCancelButtonClick: () -> Unit = { DialogViewModel.changeCurrentDialog(Dialogs.NONE) }
 ) {
 
     val dialogUiState by DialogViewModel.dialogUiState.collectAsState()
@@ -47,6 +51,7 @@ fun TimeDialog(
 
     CustomDialog(
         title = title,
+        confirmButtonText = confirmButtonText,
         onConfirmButtonClick = onConfirmButtonClick.also {
             DialogViewModel.onTimeChange(
                 convertToEpoch(

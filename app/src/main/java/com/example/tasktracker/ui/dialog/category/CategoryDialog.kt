@@ -1,4 +1,4 @@
-package com.example.tasktracker.ui.dialog
+package com.example.tasktracker.ui.dialog.category
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -25,6 +26,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.tasktracker.ui.dialog.CustomDialog
+import com.example.tasktracker.ui.dialog.DialogViewModel
+import com.example.tasktracker.ui.dialog.Dialogs
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -87,6 +91,7 @@ fun CategoryDialog(
                     }
                     Text(
                         text = stringResource(item.title),
+                        style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(8.dp)
                     )
                 }

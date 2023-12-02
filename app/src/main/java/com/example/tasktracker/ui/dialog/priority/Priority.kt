@@ -1,4 +1,4 @@
-package com.example.tasktracker.ui.dialog
+package com.example.tasktracker.ui.dialog.priority
 
 enum class Priority {
     ONE,

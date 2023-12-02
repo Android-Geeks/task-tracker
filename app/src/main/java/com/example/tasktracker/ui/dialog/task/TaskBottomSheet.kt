@@ -1,4 +1,4 @@
-package com.example.tasktracker.ui.dialog
+package com.example.tasktracker.ui.dialog.task
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,9 +24,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.tasktracker.R
+import com.example.tasktracker.ui.dialog.DialogViewModel
+import com.example.tasktracker.ui.dialog.Dialogs
+import com.example.tasktracker.ui.dialog.category.CategoryDialog
+import com.example.tasktracker.ui.dialog.datetime.DateDialog
+import com.example.tasktracker.ui.dialog.datetime.TimeDialog
+import com.example.tasktracker.ui.dialog.priority.PriorityDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -33,7 +42,8 @@ fun TaskBottomSheet() {
 
     val dialogUiState by DialogViewModel.dialogUiState.collectAsState()
 
-    if(dialogUiState.openTaskBottomSheet) {
+    if (dialogUiState.openTaskBottomSheet) {
+
         ModalBottomSheet(onDismissRequest = { DialogViewModel.resetDialogUiState() }) {
             Column(
                 modifier = Modifier
@@ -55,7 +65,14 @@ fun TaskBottomSheet() {
                             text = "Title",
                             style = MaterialTheme.typography.bodyLarge
                         )
-                    }
+                    },
+                    textStyle = MaterialTheme.typography.bodyLarge,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Next,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = null
+                    )
                 )
 
                 OutlinedTextField(
@@ -70,7 +87,14 @@ fun TaskBottomSheet() {
                             text = "Description",
                             style = MaterialTheme.typography.bodyMedium
                         )
-                    }
+                    },
+                    textStyle = MaterialTheme.typography.bodyMedium,
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = null
+                    )
                 )
 
                 Row(modifier = Modifier.fillMaxWidth()) {
@@ -111,7 +135,14 @@ fun TaskBottomSheet() {
             }
         }
     }
-    MainDialog()
+
+    when (dialogUiState.currentDialog) {
+        Dialogs.DATE -> DateDialog()
+        Dialogs.TIME -> TimeDialog()
+        Dialogs.FLAG -> PriorityDialog()
+        Dialogs.CATEGORY -> CategoryDialog()
+        else -> {}
+    }
 }
 
 
