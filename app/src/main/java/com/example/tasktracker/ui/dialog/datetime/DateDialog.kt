@@ -2,8 +2,6 @@ package com.example.tasktracker.ui.dialog.datetime
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.systemGesturesPadding
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.DisplayMode
@@ -12,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.tasktracker.ui.dialog.CustomDialog
 import com.example.tasktracker.ui.dialog.DialogViewModel
@@ -42,15 +39,24 @@ fun DateDialog(
     CustomDialog(
         title = title,
         confirmButtonText = confirmButtonText,
-        onConfirmButtonClick = onConfirmButtonClick.also { DialogViewModel.onDateChange(datePickerState.selectedDateMillis!!) },
+        onConfirmButtonClick = onConfirmButtonClick.also {
+            DialogViewModel.onDateChange(
+                datePickerState.selectedDateMillis!!
+            )
+        },
         onCancelButtonClick = onCancelButtonClick
     ) {
-        Box { DatePicker(state = datePickerState, title = null, modifier = Modifier.systemGesturesPadding()) }
+        DatePicker(
+            state = datePickerState,
+            title = null,
+            headline = null,
+            showModeToggle = false
+        )
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Preview(showSystemUi = true)
+@Preview(showSystemUi = true, apiLevel = 27)
 @Composable
 fun Pre_3() {
     DateDialog()
