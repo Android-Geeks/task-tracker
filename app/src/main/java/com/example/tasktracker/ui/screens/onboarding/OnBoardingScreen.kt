@@ -22,7 +22,6 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -166,9 +165,6 @@ fun FinishButton(
         ) {
             Button(
                 onClick = onClick,
-                colors = ButtonDefaults.buttonColors(
-                    contentColor = Color.White
-                ),
                 shape = RoundedCornerShape(8.dp),
             ) {
                 Text(text = "Get Started")
