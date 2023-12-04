@@ -76,7 +76,7 @@ fun PriorityDialog() {
                         }
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.flag),
+                        painter = painterResource(id = R.drawable.dialog_flag),
                         contentDescription = null,
                         modifier = Modifier
                             .fillMaxSize(4f)
