@@ -83,6 +83,6 @@ fun CustomDialog(
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun Pre_4() {
+fun CustomDialogPreview() {
     CustomDialog("Choose Category", "Save", {}, {}, {})
 }

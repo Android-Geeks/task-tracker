@@ -84,6 +84,6 @@ fun convertToEpoch(hours: Int, minutes: Int): Long {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showSystemUi = true)
 @Composable
-fun Pre_4() {
+fun TimeDialogPreview() {
     TimeDialog()
 }

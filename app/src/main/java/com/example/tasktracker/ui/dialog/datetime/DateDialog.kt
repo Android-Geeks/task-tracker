@@ -56,8 +56,8 @@ fun DateDialog(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-@Preview(showSystemUi = true, apiLevel = 27)
+@Preview(showSystemUi = true)
 @Composable
-fun Pre_3() {
+fun DateDialogPreview() {
     DateDialog()
 }

@@ -78,7 +78,9 @@ fun PriorityDialog() {
                     Icon(
                         painter = painterResource(id = R.drawable.flag),
                         contentDescription = null,
-                        modifier = Modifier.fillMaxSize(4f).padding(top = 8.dp),
+                        modifier = Modifier
+                            .fillMaxSize(4f)
+                            .padding(top = 8.dp),
                         tint = MaterialTheme.colorScheme.onPrimary
                     )
                     Text(
@@ -96,6 +98,6 @@ fun PriorityDialog() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showSystemUi = true)
 @Composable
-fun Pre_5() {
+fun PriorityDialogPreview() {
     PriorityDialog()
 }
