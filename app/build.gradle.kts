@@ -45,7 +45,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.3"
     }
     kotlinOptions {
         jvmTarget = "17"
@@ -53,6 +53,17 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/DEPENDENCIES"
+            excludes += "META-INF/LICENSE"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/license.txt"
+            excludes += "META-INF/NOTICE"
+            excludes += "META-INF/NOTICE.txt"
+            excludes += "META-INF/notice.txt"
+            excludes += "META-INF/ASL2.0"
+            excludes += "META-INF/*.kotlin_module"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
         }
     }
 }
@@ -82,7 +93,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:${okHttp}")
 
     //Room
-    val room = "2.6.0"
+    val room = "2.6.1"
     implementation("androidx.room:room-runtime:${room}")
     implementation("androidx.room:room-ktx:${room}")
     ksp("androidx.room:room-compiler:${room}")
@@ -95,6 +106,7 @@ dependencies {
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.7.5")
     implementation("androidx.compose.material:material:1.5.4")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
     //lottie
     implementation("com.airbnb.android:lottie-compose:6.1.0")
@@ -102,7 +114,7 @@ dependencies {
     //Coil
     implementation("io.coil-kt:coil-compose:2.5.0")
 
-    //jsoup to eliminate unwanted HTML
+    //jsoup(replaces HTML codes)
     implementation("org.jsoup:jsoup:1.16.2")
 
     // Splash Screen
@@ -124,8 +136,4 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-}
-
-kapt {
-    correctErrorTypes = true
 }
