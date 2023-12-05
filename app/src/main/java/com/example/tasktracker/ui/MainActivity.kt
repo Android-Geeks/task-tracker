@@ -1,4 +1,4 @@
-package com.example.tasktracker
+package com.example.tasktracker.ui
 
 import android.graphics.Color
 import android.os.Bundle
