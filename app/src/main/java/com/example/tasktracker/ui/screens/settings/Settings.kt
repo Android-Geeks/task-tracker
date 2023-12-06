@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.tasktracker.R
 
 
@@ -33,13 +34,15 @@ fun SettingsScreen() {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 60.dp, start = 16.dp),
+                .padding(top = 60.dp,start = 24.dp, end = 22.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
                 text = stringResource(R.string.settings_title),
-                fontWeight = FontWeight.Normal,
-            )
+                fontWeight = FontWeight(400),
+                fontSize = 14.sp,
+
+                )
             SettingsRow(
                 icon = painterResource(R.drawable.brush),
                 text = stringResource(R.string.change_app_color)
@@ -57,17 +60,30 @@ fun SettingsScreen() {
 fun TopBar() {
     CenterAlignedTopAppBar(
         title = {
-            Text(text = "Settings", textAlign = TextAlign.Center)
+            Text(
+                text = "Settings",
+                textAlign = TextAlign.Center
+            )
         },
         navigationIcon = {
-            IconButton(onClick = { }) {
+            IconButton(
+                onClick = { },
+                modifier = Modifier
+                    .size(48.dp)
+                    .padding(start = 24.dp)
+                    ) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_arrow_back_ios_24),
                     contentDescription = null,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .width(24.dp)
+                        .height(24.dp)
+
                 )
             }
-        }
+        },
+        modifier = Modifier.fillMaxWidth()
+
     )
 }
 
@@ -77,30 +93,47 @@ fun SettingsRow(icon: Painter, text: String) {
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp)
-            .padding(top = 8.dp)
     ) {
 
-        Icon(painter = icon, contentDescription = null)
+        Icon(painter = icon,
+            contentDescription = null,
+            modifier = Modifier
 
-        Spacer(modifier = Modifier.width(8.dp))
+                .size(45.dp)
+                .fillMaxSize()
+                .padding(top = 10.dp, bottom = 10.dp, end = 10.dp)
+        )
+
         Text(
-            modifier = Modifier.weight(5f),
+            modifier = Modifier
+                .weight(8f)
+                .size(48.dp)
+                .padding(top = 10.dp, bottom = 8.dp),
             text = text,
+            lineHeight = 24.08.sp,
+            fontWeight = FontWeight(400),
             style = MaterialTheme.typography.bodyLarge,
         )
         IconButton(
             modifier = Modifier
-                .size(24.dp)
+                .size(44.dp)
                 .weight(1f),
             onClick = {  }
         ) {
-            Icon(painter = painterResource(R.drawable.baseline_arrow_forward_ios_24), contentDescription = null)
+            Icon(
+                painter = painterResource(R.drawable.baseline_arrow_forward_ios_24),
+                contentDescription = null,
+                modifier = Modifier
+                    .width(24.dp)
+                    .height(24.dp)
+            )
         }
     }
 }
 
 @Preview
 @Composable
-fun SettingPreview() {
+fun SettingPreview(
+) {
     SettingsScreen()
 }
